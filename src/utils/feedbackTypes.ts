@@ -1,15 +1,16 @@
-export const feedbackTypes = {
-  'BUG': {
+export const FeedbackTypes = {
+  BUG: {
     title: 'Problema',
-    image: require('../assets/bug.png')
+    image: require('../assets/bug.png'),
   },
-  'IDEA': {
+  IDEA: {
     title: 'Ideia',
     image: require('../assets/idea.png'),
   },
-  'OTHER': {
+  OTHER: {
     title: 'Outro',
     image: require('../assets/thought.png'),
   },
 };
 
+export type FeedbackType = keyof typeof FeedbackTypes;
