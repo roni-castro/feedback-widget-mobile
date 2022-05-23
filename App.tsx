@@ -1,3 +1,4 @@
+import 'react-native-gesture-handler';
 import { useCallback, useEffect, useState } from 'react';
 import { SafeAreaView, View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
@@ -5,7 +6,7 @@ import * as Font from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import { Inter_400Regular, Inter_500Medium } from '@expo-google-fonts/inter';
 
-import { Widget } from './src/components/Widget';
+import Widget from './src/components/Widget';
 import { theme } from './src/theme';
 
 export default function App() {
