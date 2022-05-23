@@ -5,10 +5,11 @@ import { Copyright } from '../Copyright';
 import { FeedbackType, FeedbackTypes } from '../../utils/feedbackTypes';
 import { Option } from '../Option';
 
-export function Options() {
-  const handleOnFeedbackPress = (type: FeedbackType) => {
-    console.log(type);
-  };
+interface OptionProps {
+  onFeedbackPress: (type: FeedbackType) => void;
+}
+
+export function Options({ onFeedbackPress }: OptionProps) {
 
   return (
     <View style={styles.container}>
@@ -18,7 +19,7 @@ export function Options() {
           <Option
             key={key as FeedbackType}
             type={key as FeedbackType}
-            onItemPress={handleOnFeedbackPress}
+            onItemPress={onFeedbackPress}
             image={value.image}
             title={value.title}
           />

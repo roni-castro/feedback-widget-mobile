@@ -12,6 +12,7 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   headerText: {
+    marginTop: 16,
     fontFamily: theme.fonts.medium,
     fontSize: 20,
     color: theme.colors.text_primary,
