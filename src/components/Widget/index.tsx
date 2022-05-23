@@ -6,6 +6,7 @@ import { gestureHandlerRootHOC } from 'react-native-gesture-handler';
 
 import { theme } from '../../theme';
 import { styles } from './styles';
+import { Options } from '../Options';
 
 function Widget() {
   const bottomSheetRef = useRef<BottomSheet>(null);
@@ -18,14 +19,6 @@ function Widget() {
 
   return (
     <>
-      <BottomSheet
-        ref={bottomSheetRef}
-        snapPoints={snapPoints}
-        backgroundStyle={styles.modal}
-        handleIndicatorStyle={styles.indicator}
-      >
-        <></>
-      </BottomSheet>
       <TouchableOpacity style={styles.button} onPress={handleOpen}>
         <ChatTeardropDots
           size={24}
@@ -33,6 +26,14 @@ function Widget() {
           color={theme.colors.text_on_brand_color}
         />
       </TouchableOpacity>
+      <BottomSheet
+        ref={bottomSheetRef}
+        snapPoints={snapPoints}
+        backgroundStyle={styles.modal}
+        handleIndicatorStyle={styles.indicator}
+      >
+        <Options />
+      </BottomSheet>
     </>
   );
 }
