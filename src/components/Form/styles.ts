@@ -53,17 +53,6 @@ export const styles = StyleSheet.create({
     backgroundColor: theme.colors.surface_secondary,
   },
   sendButton: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 4,
     marginLeft: 8,
-    color: theme.colors.text_primary,
-    backgroundColor: theme.colors.brand,
-  },
-  sendButtonText: {
-    fontFamily: theme.fonts.medium,
-    fontSize: 14,
-    color: theme.colors.text_primary,
   },
 });

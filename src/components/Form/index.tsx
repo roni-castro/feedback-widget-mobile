@@ -1,9 +1,12 @@
 import { ArrowLeft, Camera } from 'phosphor-react-native';
+import { useState } from 'react';
 import { Image, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
 import { theme } from '../../theme';
 import { FeedbackType, FeedbackTypes } from '../../utils/feedbackTypes';
+import { Button } from '../Button';
 import { Copyright } from '../Copyright';
+import { ScreenshotButton } from '../ScreenshotButton';
 import { styles } from './styles';
 
 interface FormProps {
@@ -12,7 +15,12 @@ interface FormProps {
 }
 
 export function Form({ type, onBackPress }: FormProps) {
+  const [screenshot, setScreenShot] = useState<string | null>(null);
   const feedbackType = FeedbackTypes[type];
+
+  const handleOnRemoveScreenshot = () => {
+    setScreenShot(null);
+  };
 
   return (
     <View style={styles.container}>
@@ -36,12 +44,16 @@ export function Form({ type, onBackPress }: FormProps) {
         placeholderTextColor={theme.colors.text_secondary}
       />
       <View style={styles.footerButtonContainer}>
-        <TouchableOpacity style={styles.cameraButton}>
-          <Camera size={24} color={theme.colors.text_primary} />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.sendButton}>
-          <Text style={styles.sendButtonText}>Enviar feedback</Text>
-        </TouchableOpacity>
+        <ScreenshotButton
+          screenshot={screenshot}
+          onRemoveShot={handleOnRemoveScreenshot}
+          onTakeShot={() => {}}
+        />
+        <Button
+          style={styles.sendButton}
+          title="Enviar feedback"
+          isLoading={false}
+        />
       </View>
       <Copyright />
     </View>
