@@ -2,6 +2,7 @@ import { ArrowLeft, Camera } from 'phosphor-react-native';
 import { useState } from 'react';
 import { Image, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { captureScreen } from 'react-native-view-shot';
+import * as FileSystem from 'expo-file-system';
 
 import { theme } from '../../theme';
 import { FeedbackType, FeedbackTypes } from '../../utils/feedbackTypes';
@@ -9,6 +10,7 @@ import { Button } from '../Button';
 import { Copyright } from '../Copyright';
 import { ScreenshotButton } from '../ScreenshotButton';
 import { styles } from './styles';
+import { sendFeedback } from '../../service/feedback';
 
 interface FormProps {
   type: FeedbackType;
@@ -19,6 +21,7 @@ interface FormProps {
 export function Form({ type, onFeedbackCanceled, onFeedbackSent }: FormProps) {
   const [screenshot, setScreenShot] = useState<string | null>(null);
   const [isSendingFeedback, setIsSendingFeedback] = useState(false);
+  const [comment, setComment] = useState('');
   const feedbackType = FeedbackTypes[type];
 
   const handleRemoveScreenshot = () => {
@@ -28,7 +31,8 @@ export function Form({ type, onFeedbackCanceled, onFeedbackSent }: FormProps) {
   const handleScreenshot = () => {
     captureScreen({
       format: 'jpg',
-      quality: 0.8,
+      quality: 0.1,
+      width: 800,
     })
       .then((uri) => {
         setScreenShot(uri);
@@ -36,10 +40,24 @@ export function Form({ type, onFeedbackCanceled, onFeedbackSent }: FormProps) {
       .catch((e) => console.log(e));
   };
 
-  const handleSendFeedback = () => {
-    setIsSendingFeedback(true);
-    onFeedbackSent();
-    setIsSendingFeedback(false);
+  const handleSendFeedback = async () => {
+    try {
+      setIsSendingFeedback(true);
+      const screenshotBase64 =
+        screenshot &&
+        (await FileSystem.readAsStringAsync(screenshot, {
+          encoding: 'base64',
+        }));
+      await sendFeedback({
+        type,
+        comment,
+        screenshotBase64,
+      });
+      onFeedbackSent();
+    } catch (e) {
+      setIsSendingFeedback(false);
+      console.log(e);
+    }
   };
 
   return (
@@ -62,6 +80,8 @@ export function Form({ type, onFeedbackCanceled, onFeedbackSent }: FormProps) {
         multiline
         placeholder="Algo não está funcionando bem? Queremos corrigir. Conte com detalhes o que está acontecendo..."
         placeholderTextColor={theme.colors.text_secondary}
+        defaultValue={comment}
+        onChangeText={setComment}
       />
       <View style={styles.footerButtonContainer}>
         <ScreenshotButton
@@ -70,7 +90,7 @@ export function Form({ type, onFeedbackCanceled, onFeedbackSent }: FormProps) {
           onTakeShot={handleScreenshot}
         />
         <Button
-          disabled={isSendingFeedback}
+          disabled={isSendingFeedback || !comment}
           onPress={handleSendFeedback}
           style={styles.sendButton}
           title="Enviar feedback"

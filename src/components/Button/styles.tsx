@@ -11,6 +11,9 @@ export const styles = StyleSheet.create({
     borderRadius: 4,
     color: theme.colors.text_primary,
   },
+  containerDisabled: {
+    backgroundColor: theme.colors.surface_secondary,
+  },
   title: {
     fontFamily: theme.fonts.medium,
     fontSize: 14,
