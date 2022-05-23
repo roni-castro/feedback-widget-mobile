@@ -1,6 +1,7 @@
 import { ArrowLeft, Camera } from 'phosphor-react-native';
 import { useState } from 'react';
 import { Image, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { captureScreen } from 'react-native-view-shot';
 
 import { theme } from '../../theme';
 import { FeedbackType, FeedbackTypes } from '../../utils/feedbackTypes';
@@ -20,8 +21,19 @@ export function Form({ type, onFeedbackCanceled, onFeedbackSent }: FormProps) {
   const [isSendingFeedback, setIsSendingFeedback] = useState(false);
   const feedbackType = FeedbackTypes[type];
 
-  const handleOnRemoveScreenshot = () => {
+  const handleRemoveScreenshot = () => {
     setScreenShot(null);
+  };
+
+  const handleScreenshot = () => {
+    captureScreen({
+      format: 'jpg',
+      quality: 0.8,
+    })
+      .then((uri) => {
+        setScreenShot(uri);
+      })
+      .catch((e) => console.log(e));
   };
 
   const handleSendFeedback = () => {
@@ -54,8 +66,8 @@ export function Form({ type, onFeedbackCanceled, onFeedbackSent }: FormProps) {
       <View style={styles.footerButtonContainer}>
         <ScreenshotButton
           screenshot={screenshot}
-          onRemoveShot={handleOnRemoveScreenshot}
-          onTakeShot={() => {}}
+          onRemoveShot={handleRemoveScreenshot}
+          onTakeShot={handleScreenshot}
         />
         <Button
           disabled={isSendingFeedback}
