@@ -9,10 +9,12 @@ import { styles } from './styles';
 import { Options } from '../Options';
 import { FeedbackType } from '../../utils/feedbackTypes';
 import { Form } from '../Form';
+import { Success } from '../Success';
 
 function Widget() {
   const [selectedFeedbackType, setSelectedFeedback] =
     useState<FeedbackType | null>(null);
+  const [sentFeedback, setSentFeedback] = useState(false);
   const bottomSheetRef = useRef<BottomSheet>(null);
 
   const snapPoints = useMemo(() => [1, 288], []);
@@ -27,6 +29,11 @@ function Widget() {
 
   const restartFeedback = () => {
     setSelectedFeedback(null);
+    setSentFeedback(false);
+  };
+
+  const handleFeedbackSent = () => {
+    setSentFeedback(true);
   };
 
   return (
@@ -44,10 +51,20 @@ function Widget() {
         backgroundStyle={styles.modal}
         handleIndicatorStyle={styles.indicator}
       >
-        {selectedFeedbackType ? (
-          <Form type={selectedFeedbackType} onBackPress={restartFeedback} />
+        {sentFeedback ? (
+          <Success onRestartButtonPress={restartFeedback} />
         ) : (
-          <Options onFeedbackPress={handleOnFeedbackPress} />
+          <>
+            {selectedFeedbackType ? (
+              <Form
+                type={selectedFeedbackType}
+                onFeedbackCanceled={restartFeedback}
+                onFeedbackSent={handleFeedbackSent}
+              />
+            ) : (
+              <Options onFeedbackPress={handleOnFeedbackPress} />
+            )}
+          </>
         )}
       </BottomSheet>
     </>

@@ -11,21 +11,29 @@ import { styles } from './styles';
 
 interface FormProps {
   type: FeedbackType;
-  onBackPress: () => void;
+  onFeedbackCanceled: () => void;
+  onFeedbackSent: () => void;
 }
 
-export function Form({ type, onBackPress }: FormProps) {
+export function Form({ type, onFeedbackCanceled, onFeedbackSent }: FormProps) {
   const [screenshot, setScreenShot] = useState<string | null>(null);
+  const [isSendingFeedback, setIsSendingFeedback] = useState(false);
   const feedbackType = FeedbackTypes[type];
 
   const handleOnRemoveScreenshot = () => {
     setScreenShot(null);
   };
 
+  const handleSendFeedback = () => {
+    setIsSendingFeedback(true);
+    onFeedbackSent();
+    setIsSendingFeedback(false);
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={onBackPress}>
+        <TouchableOpacity onPress={onFeedbackCanceled}>
           <ArrowLeft
             size={24}
             weight="bold"
@@ -50,9 +58,11 @@ export function Form({ type, onBackPress }: FormProps) {
           onTakeShot={() => {}}
         />
         <Button
+          disabled={isSendingFeedback}
+          onPress={handleSendFeedback}
           style={styles.sendButton}
           title="Enviar feedback"
-          isLoading={false}
+          isLoading={isSendingFeedback}
         />
       </View>
       <Copyright />
